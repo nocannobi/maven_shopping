@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.CustomerDao">
+    <!--配置了包别名，可直接用customer-->
+    <resultMap id="customerMap" type="Customer">
+        <id column="id" property="id"></id>
+        <result column="CUSTOMER_NAME" property="customerName"></result>
+        <result column="CUSTOMER_PASSWORD" property="customerPassword"></result>
+        <result column="CUSTOMER_EMAIL" property="customerEmail"></result>
+        <result column="CUSTOMER_PHONE" property="customerPhone"></result>
+        <result column="CUSTOMER_MONEY" property="customerMoney"></result>
+        <result column="CUSTOMER_IS_NORMAL" property="customerIsNormal"></result>
+        <result column="CUSTOMER_CREATE_TIME" property="customerCreateTime"></result>
+        <result column="CUSTOMER_LOGIN_TIME" property="customerLoginTime"></result>
+        <result column="CUSTOMER_MODIFIED_TIME" property="customerModifiedTime"></result>
+       <!-- <collection property="orderLists" ofType="OrderList" column="{customerId = id}" select="com.mapper.OrderListMapper.findOrderListByCid"></collection>-->
+    </resultMap>
+
+        <sql id="select*">
+             SELECT * from customer
+        </sql>
+        <select id="findCustomerByName" parameterType="String" resultMap="customerMap">
+           SELECT * from customer WHERE customer_name= #{customerName} AND customer_password=#{customerPassword}
+        </select>
+
+        <select id="queryAllCustomer"  resultMap="customerMap">
+            <include refid="select*"></include>
+        </select>
+
+        <update id="updateCustomer"  parameterType="customer">
+            UPDATE customer SET customer_name = #{customerName} WHERE id= #{id}
+        </update>
+
+        <select id="findCustomerById" parameterType="customer" resultMap="customerMap">
+            <include refid="select*"></include>
+            <where>
+                id = #{id}
+            </where>
+        </select>
+
+        <insert id="addCustomer" parameterType="customer">
+
+            <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
+                SELECT SHOPPING_SEQ.nextval from dual
+            </selectKey>
+
+            INSERT INTO root.customer
+
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    ID,
+                </if>
+                <if test="customerName != null">
+                    CUSTOMER_NAME,
+                </if>
+                <if test="customerPassword != null">
+                    CUSTOMER_PASSWORD,
+                </if>
+                <if test="customerEmail != null">
+                    CUSTOMER_EMAIL,
+                </if>
+                <if test="customerLoginTime != null">
+                    CUSTOMER_LOGIN_TIME,
+                </if>
+                <if test="customerCreateTime != null">
+                    CUSTOMER_CREATE_TIME,
+                </if>
+                <if test="customerPhone != null">
+                    CUSTOMER_PHONE,
+                </if>
+                <if test="customerMoney != null">
+                    CUSTOMER_MONEY,
+                </if>
+                <if test="customerModifiedTime != null">
+                    CUSTOMER_MODIFIED_TIME,
+                </if>
+            </trim>
+            <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    #{id},
+                </if>
+                <if test="customerName != null">
+                    #{customerName},
+                </if>
+                <if test="customerPassword != null">
+                    #{customerPassword},
+                </if>
+                <if test="customerEmail != null">
+                    #{customerEmail},
+                </if>
+                <if test="customerLoginTime != null">
+                    #{customerLoginTime},
+                </if>
+                <if test="customerCreateTime != null">
+                    #{customerCreateTime},
+                </if>
+                <if test="customerPhone != null">
+                    #{customerPhone},
+                </if>
+                <if test="customerMoney != null">
+                    #{customerMoney}),
+                </if>
+                <if test="customerModifiedTime != null">
+                    #{customerModifiedTime},
+                </if>
+            </trim>
+
+
+        </insert>
+</mapper>

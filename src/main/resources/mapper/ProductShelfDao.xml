@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ProductShelfDao">
+    <resultMap id="productShelfMap" type="productShelf">
+        <id column="id" property="id"></id>
+        <result column="pro_id" property="productId"></result>
+        <result column="product_shelf_is_state" property="productShelfIsState"></result>
+        <result column="shelf_created_time" property="shelfCreateTime"></result>
+        <result column="shelf_modified_time" property="shelfModifiedTime"></result>
+    </resultMap>
+    <sql id="selectProductShelf">
+        SELECT * FROM product_shelf
+    </sql>
+    <select id="findProductShelfByPid" parameterType="ProductShelf" resultMap="productShelfMap">
+        <include refid="selectProductShelf"></include>
+        <where>
+            pro_id = #{productId}
+        </where>
+    </select>
+</mapper>

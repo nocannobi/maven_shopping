@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.AdminDao">
+        <resultMap id="adminMap" type="Admin">
+            <id property="id" column="id"></id>
+            <result property="adminName" column="ADMIN_NAME"></result>
+            <result property="adminPassword" column="ADMIN_PASSWORD"></result>
+            <result property="adminIsNormal" column="ADMIN_IS_NORMAL"></result>
+            <result property="adminCreateTime" column="ADMIN_CREATE_TIME"></result>
+            <result property="adminModifiedTime" column="ADMIN_MODIFIED_TIME"></result>
+        </resultMap>
+
+        <sql id="selectAdmin">
+            SELECT * FROM admin
+        </sql>
+        <select id="queryAdminByName" parameterType="admin" resultMap="adminMap">
+            <include refid="selectAdmin"></include>
+            <where>
+                <choose>
+                    <when test="adminName!=null and adminPassword!=null">
+                        AND ADMIN_NAME=#{adminName} AND
+                        ADMIN_PASSWORD=#{adminPassword}
+                    </when>
+                    <otherwise>
+                        AND  1=2
+                    </otherwise>
+
+                </choose>
+            </where>
+        </select>
+</mapper>

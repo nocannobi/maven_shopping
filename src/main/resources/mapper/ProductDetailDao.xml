@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ProductDetailDao">
+    <resultMap id="productDetailMap" type="ProductDetail">
+        <id column="id" property="id"></id>
+        <result column="pro_id" property="productId"></result>
+        <result column="small_image" property="smallImage"></result>
+        <result column="big_image" property="bigImage"></result>
+        <result column="pro_caption" property="productCaption"></result>
+    </resultMap>
+    <sql id="selectProductDetail">
+        SELECT * FROM product_detail
+    </sql>
+   <select id="findProductDetailById" parameterType="ProductDetail" resultMap="productDetailMap">
+       <include refid="selectProductDetail"></include>
+       <where>
+           id=#{id}
+       </where>
+   </select>
+    <select id="findProductDetailByPid" parameterType="ProductDetail" resultMap="productDetailMap">
+        <include refid="selectProductDetail"></include>
+        <where>
+            pro_id = #{productId}
+        </where>
+    </select>
+
+</mapper>

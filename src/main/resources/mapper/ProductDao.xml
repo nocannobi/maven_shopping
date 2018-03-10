@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ProductDao">
+
+    <sql id="selectProduct">
+        SELECT * FROM product
+    </sql>
+    <resultMap id="productMap" type="Product">
+        <id column="pro_id" property="id"></id>
+        <result column="pro_name" property="productName"></result>
+        <result column="pro_price" property="productPrice"></result>
+        <result column="pro_type" property="productType"></result>
+        <result column="pro_is_deleted" property="productIsDeleted"></result>
+        <result column="pro_create_time" property="productCreateTime"></result>
+        <result column="pro_modified_time" property="productModifiedTime"></result>
+        <association property="productDetail" column="{productId = pro_id}" select="com.mapper.ProductDetailMapper.findProductDetailByPid"></association>
+        <association property="productShelf" column="{productId = pro_id}" select="com.mapper.ProductShelfMapper.findProductShelfByPid"></association>
+        <association property="productStock" column="{productId = pro_id}" select="com.mapper.ProductStockMapper.findProductStockByPid"></association>
+    </resultMap>
+    <select id="queryProductByName" parameterType="String" resultMap="productMap">
+        SELECT * FROM product WHERE pro_name=#{productName}
+    </select>
+
+    <select id="queryAllProduct" resultMap="productMap">
+        SELECT * FROM product
+    </select>
+
+    <insert id="addProduct" parameterType="product">
+        <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
+          SELECT SHOPPING_SEQ.nextval FROM dual
+        </selectKey>
+        INSERT INTO product(PRO_ID, PRO_NAME, PRO_PRICE, PRO_TYPE, PRO_IS_DELETED, PRO_CREATED_TIME, PRO_MODIFIED_TIME)
+          VALUES(#{id}, #{productName}, #{productPrice}, #{productType}, #{productIsDeleted}, #{productCreateTime}, #{productModifiedTime})
+    </insert>
+
+    <update id="updateProduct" parameterType="product">
+       UPDATE product SET pro_price = #{productPrice} WHERE pro_id = #{id}
+    </update>
+
+    <delete id="delProduct" parameterType="product">
+        /*delete from product where id = ?*/
+        UPDATE product SET PRO_IS_DELETED=#{productIsDeleted} WHERE pro_id=#{id}
+    </delete>
+
+    <select id="queryProduct" resultMap="productMap">
+      /*传入两个基本类型参数，命名有规范，只能是0，1 或者param1，param2*/
+        SELECT * FROM product WHERE pro_name= #{0} AND pro_id = #{1}
+    </select>
+
+    <select id="queryProductById" parameterType="product" resultMap="productMap">
+        <include refid="selectProduct"></include>
+        <where>
+            <choose>
+                <when test="id != null">
+                    AND pro_id=#{id}
+                </when>
+                <otherwise>
+                      1=2
+                </otherwise>
+            </choose>
+        </where>
+
+    </select>
+</mapper>

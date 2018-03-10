@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ProductStockDao">
+    <resultMap id="productStockMap" type="productStock">
+        <id column="sto_id" property="id"></id>
+        <result column="pro_id" property="productId"></result>
+        <result column="sto_number" property="stockNumber"></result>
+        <result column="sto_created_time" property="stockCreateTime"></result>
+        <result column="sto_modified_time" property="stockModifiedTime"></result>
+    </resultMap>
+    <sql id="selectProductStock">
+        SELECT * FROM product_stock
+    </sql>
+    <select id="findProductStockByPid" parameterType="ProductStock" resultMap="productStockMap">
+        <include refid="selectProductStock"></include>
+        <where>
+            pro_id = #{productId}
+        </where>
+    </select>
+</mapper>

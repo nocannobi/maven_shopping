@@ -14,6 +14,10 @@
     <script src="/scripts/bootstrap.min.js"></script>
 
     <style>
+        .container{
+            margin-top: 80px;
+            margin-left: 500px;
+        }
 
     body{
         background-image: url("/images/223.jpg");

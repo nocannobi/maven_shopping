@@ -14,10 +14,14 @@
     <script src="/scripts/bootstrap.min.js"></script>
     <style>
         body{
-            background-image: url("images/223.jpg");
+            background-image: url("/images/223.jpg");
             background-repeat: no-repeat;
             background-size: 100%;
 
+        }
+        .container{
+            margin-top: 80px;
+            margin-left: 500px;
         }
     </style>
 </head>
